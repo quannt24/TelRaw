@@ -2,6 +2,6 @@ package com.hexa.telraw;
 
 public interface DataObserver {
 
-    void onReceive(String str);
+    void onReceive(byte[] raw);
 
 }
