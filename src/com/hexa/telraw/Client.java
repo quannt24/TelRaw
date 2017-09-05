@@ -29,7 +29,6 @@ public class Client implements CompletionHandler<Void, Attachment> {
 
             running = true;
             while (running) {
-                buf.clear();
                 Future<Integer> ret = channel.read(buf);
 
                 try {
@@ -38,7 +37,9 @@ public class Client implements CompletionHandler<Void, Attachment> {
 
                     if (n > 0) {
                         byte[] raw = new byte[n];
+                        buf.rewind();
                         buf.get(raw);
+                        buf.clear();
                         /*
                          * String str = new String(raw, StandardCharsets.UTF_8);
                          * System.err.println("Buffer: [" + str + "]\n");
@@ -51,6 +52,7 @@ public class Client implements CompletionHandler<Void, Attachment> {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
                     // TODO Auto-generated catch block
+                    System.err.println("Connection is closing");
                     e.printStackTrace();
                 }
             }
