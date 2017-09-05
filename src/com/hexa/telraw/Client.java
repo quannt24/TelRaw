@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 class Attachment {
+    byte[] msg;
 }
 
 public class Client implements CompletionHandler<Void, Attachment> {
@@ -56,6 +57,28 @@ public class Client implements CompletionHandler<Void, Attachment> {
         }
     }
 
+    private class WriteHandler implements CompletionHandler<Integer, Attachment> {
+
+        @Override
+        public void completed(Integer result, Attachment attachment) {
+            if (attachment != null) {
+                if (dataObs != null)
+                    dataObs.onSent(attachment.msg);
+            }
+        }
+
+        @Override
+        public void failed(Throwable exc, Attachment attachment) {
+            if (dataObs != null) {
+                if (attachment != null)
+                    dataObs.onSendFail(attachment.msg);
+                else
+                    dataObs.onSendFail(null);
+            }
+        }
+
+    }
+
     private String host;
     private int port;
     private AsynchronousSocketChannel channel;
@@ -63,11 +86,13 @@ public class Client implements CompletionHandler<Void, Attachment> {
     private ConnectionObserver conObs;
     private DataObserver dataObs;
     private Reader reader;
+    private WriteHandler writeHandler;
 
     public Client(String host, int port) {
         this.host = host;
         this.port = port;
         connected = false;
+        writeHandler = new WriteHandler();
     }
 
     public boolean isConnected() {
@@ -106,9 +131,12 @@ public class Client implements CompletionHandler<Void, Attachment> {
 
     public void send(String str) {
         ByteBuffer buf = ByteBuffer.wrap(str.getBytes());
-        channel.write(buf);
+        Attachment att = new Attachment();
+        att.msg = str.getBytes();
+        channel.write(buf, att, writeHandler);
     }
 
+    // Connection completes
     @Override
     public void completed(Void result, Attachment attachment) {
         connected = true;
@@ -121,6 +149,7 @@ public class Client implements CompletionHandler<Void, Attachment> {
         }
     }
 
+    // Connection fails
     @Override
     public void failed(Throwable exc, Attachment attachment) {
         connected = false;
