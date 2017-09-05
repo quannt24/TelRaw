@@ -141,6 +141,7 @@ public class TelRawController implements ConnectionObserver, DataObserver {
             @Override
             public void run() {
                 txaRx.appendText(RawStringParser.toReadable(raw) + "\n");
+                txaTx.appendText("\n");
             }
         });
     }
@@ -152,6 +153,7 @@ public class TelRawController implements ConnectionObserver, DataObserver {
             @Override
             public void run() {
                 txaTx.appendText(RawStringParser.toReadable(raw) + "\n");
+                txaRx.appendText("\n");
             }
         });
     }
