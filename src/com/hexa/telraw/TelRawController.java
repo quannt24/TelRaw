@@ -1,7 +1,6 @@
 package com.hexa.telraw;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -86,7 +85,8 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     protected void handleBtnSendAction(ActionEvent event) {
         System.err.println("handleSubmitButtonAction: " + txaInput.getText());
-        client.send(txaInput.getText());
+        // Parse input string
+        client.send(RawStringParser.toRaw(txaInput.getText()));
     }
 
     @Override
@@ -140,8 +140,7 @@ public class TelRawController implements ConnectionObserver, DataObserver {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                String str = new String(raw, StandardCharsets.UTF_8);
-                txaRx.appendText(str + "\n"); // TODO
+                txaRx.appendText(RawStringParser.toReadable(raw) + "\n");
             }
         });
     }
@@ -152,8 +151,7 @@ public class TelRawController implements ConnectionObserver, DataObserver {
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                String str = new String(raw, StandardCharsets.UTF_8);
-                txaTx.appendText(str + "\n"); // TODO
+                txaTx.appendText(RawStringParser.toReadable(raw) + "\n");
             }
         });
     }
