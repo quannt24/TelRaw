@@ -1,6 +1,7 @@
 package com.hexa.telraw;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -10,7 +11,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class TelRawController implements ConnectionObserver {
+public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     private TextField txfHost;
     @FXML
@@ -29,6 +30,9 @@ public class TelRawController implements ConnectionObserver {
     private Button btnSend;
 
     private Client client;
+
+    public TelRawController() {
+    }
 
     @FXML
     public void initialize() {
@@ -50,6 +54,7 @@ public class TelRawController implements ConnectionObserver {
 
                 client = new Client(host, Integer.valueOf(port));
                 client.setConnectionObserver(this);
+                client.setDataObserver(this);
                 try {
                     System.err.println("handleBtnConnectAction: connecting...");
                     client.connect();
@@ -81,7 +86,7 @@ public class TelRawController implements ConnectionObserver {
     @FXML
     protected void handleBtnSendAction(ActionEvent event) {
         System.err.println("handleSubmitButtonAction: " + txaInput.getText());
-        txaTx.appendText(txaInput.getText() + "\n");
+        client.send(txaInput.getText());
     }
 
     @Override
@@ -127,5 +132,35 @@ public class TelRawController implements ConnectionObserver {
                 btnConnect.setDisable(false);
             }
         });
+    }
+
+    @Override
+    public void onReceive(byte[] raw) {
+        // Update UI
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String str = new String(raw, StandardCharsets.UTF_8);
+                txaRx.appendText(str + "\n"); // TODO
+            }
+        });
+    }
+
+    @Override
+    public void onSent(byte[] raw) {
+        // Update UI
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                String str = new String(raw, StandardCharsets.UTF_8);
+                txaTx.appendText(str + "\n"); // TODO
+            }
+        });
+    }
+
+    @Override
+    public void onSendFail(byte[] raw) {
+        // TODO Auto-generated method stub
+        System.err.println("onSendFail");
     }
 }
