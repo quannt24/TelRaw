@@ -129,10 +129,10 @@ public class Client implements CompletionHandler<Void, Attachment> {
         conObs.onDisconnected();
     }
 
-    public void send(String str) {
-        ByteBuffer buf = ByteBuffer.wrap(str.getBytes());
+    public void send(byte[] msg) {
+        ByteBuffer buf = ByteBuffer.wrap(msg);
         Attachment att = new Attachment();
-        att.msg = str.getBytes();
+        att.msg = msg;
         channel.write(buf, att, writeHandler);
     }
 
