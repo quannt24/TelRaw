@@ -46,6 +46,11 @@ public class Client implements CompletionHandler<Void, Attachment> {
                          */
                         if (dataObs != null)
                             dataObs.onReceive(raw);
+                    } else if (n < 0) {
+                        System.err.println("End of stream");
+                        running = false;
+                        if (conObs != null)
+                            conObs.onDisconnected();
                     }
                 } catch (InterruptedException e) {
                     // TODO Auto-generated catch block
@@ -128,7 +133,8 @@ public class Client implements CompletionHandler<Void, Attachment> {
             e.printStackTrace();
         }
 
-        conObs.onDisconnected();
+        if (conObs != null)
+            conObs.onDisconnected();
     }
 
     public void send(byte[] msg) {
@@ -138,7 +144,11 @@ public class Client implements CompletionHandler<Void, Attachment> {
         channel.write(buf, att, writeHandler);
     }
 
-    // Connection completes
+    /*
+     * Implement CompletionHandler
+     * -------------------------------------------------------
+     */
+    
     @Override
     public void completed(Void result, Attachment attachment) {
         connected = true;
