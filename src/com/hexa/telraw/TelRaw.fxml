@@ -40,7 +40,7 @@
       <HBox spacing="4.0" VBox.vgrow="ALWAYS">
          <children>
             <ListView prefHeight="200.0" prefWidth="200.0" />
-            <VBox spacing="4.0">
+            <VBox spacing="4.0" HBox.hgrow="ALWAYS">
                <children>
                 <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                   <items>
@@ -72,8 +72,8 @@
                         <VBox spacing="4.0">
                            <children>
                           <Button fx:id="btnSend" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBtnSendAction" text="Send" />
-                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Save" />
-                              <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Clear" />
+                              <Button fx:id="btnSave" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBtnSaveAction" text="Save" />
+                              <Button fx:id="btnClear" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleBtnClearAction" text="Clear" />
                            </children>
                         </VBox>
                   </children>
