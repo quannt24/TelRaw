@@ -27,6 +27,10 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     private TextArea txaRx;
     @FXML
     private Button btnSend;
+    @FXML
+    private Button btnSave;
+    @FXML
+    private Button btnClear;
 
     private Client client;
 
@@ -85,15 +89,28 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     protected void handleBtnSendAction(ActionEvent event) {
         System.err.println("handleBtnSendAction: " + txaInput.getText());
-        // Parse input string
-        client.send(RawStringParser.toRaw(txaInput.getText()));
+        if (client.isConnected()) {
+            // Parse input string
+            client.send(RawStringParser.toRaw(txaInput.getText()));
+        } else {
+            // TODO Popup error
+        }
+    }
+
+    @FXML
+    protected void handleBtnSaveAction(ActionEvent event) {
+    }
+
+    @FXML
+    protected void handleBtnClearAction(ActionEvent event) {
+        txaInput.clear();
     }
 
     /*
      * Implement ConnectionObserver
      * -------------------------------------------------------
      */
-    
+
     @Override
     public void onConnected() {
         System.err.println("onConnected");
