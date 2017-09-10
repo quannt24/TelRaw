@@ -39,7 +39,7 @@
       </HBox>
       <HBox spacing="4.0" VBox.vgrow="ALWAYS">
          <children>
-            <ListView prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="lstSnippet" prefHeight="200.0" prefWidth="200.0" />
             <VBox spacing="4.0" HBox.hgrow="ALWAYS">
                <children>
                 <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">

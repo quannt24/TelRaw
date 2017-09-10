@@ -3,9 +3,12 @@ package com.hexa.telraw;
 import java.io.IOException;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -31,8 +34,11 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     private Button btnSave;
     @FXML
     private Button btnClear;
+    @FXML
+    private ListView<String> lstSnippet;
 
     private Client client;
+    private ObservableList<String> listSnippet = FXCollections.observableArrayList();
 
     public TelRawController() {
     }
@@ -40,6 +46,7 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     public void initialize() {
         pinConnect.setVisible(false);
+        lstSnippet.setItems(listSnippet);
     }
 
     @FXML
@@ -99,6 +106,9 @@ public class TelRawController implements ConnectionObserver, DataObserver {
 
     @FXML
     protected void handleBtnSaveAction(ActionEvent event) {
+        String snippet = txaInput.getText();
+        if (snippet != null && snippet.length() > 0)
+            listSnippet.add(snippet);
     }
 
     @FXML
