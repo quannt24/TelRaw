@@ -1,6 +1,10 @@
 package com.hexa.telraw;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -51,12 +55,48 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     private ArrayList<Snippet> listSnippet;
 
     public TelRawController() {
+        System.err.println("Path: " + System.getProperty("user.dir"));
         listSnippet = new ArrayList<>();
+
+        // Load snippets from file
+        FileInputStream fis = null;
+        InputStreamReader isr = null;
+        BufferedReader br = null;
+        try {
+            fis = new FileInputStream(System.getProperty("user.dir") + "\\snippet.txt");
+            isr = new InputStreamReader(fis);
+            br = new BufferedReader(isr);
+            String line1 = null;
+            String line2 = null;
+            while ((line1 = br.readLine()) != null) {
+                if ((line2 = br.readLine()) != null) {
+                    Snippet snip = new Snippet(line1, line2);
+                    listSnippet.add(snip);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (br != null)
+                    br.close();
+                if (isr != null)
+                    isr.close();
+                if (fis != null)
+                    fis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @FXML
     public void initialize() {
         pinConnect.setVisible(false);
+
+        for (int i = 0; i < listSnippet.size(); i++)
+            listSnipStr.add(listSnippet.get(i).toString());
+
         ltvSnippet.setItems(listSnipStr);
     }
 
@@ -129,14 +169,14 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     protected void handleBtnClearInputAction(ActionEvent event) {
         txaInput.clear();
     }
-    
+
     @FXML
     protected void handleLtvSnippetOnMouseClicked(MouseEvent event) {
         int i = ltvSnippet.getSelectionModel().getSelectedIndex();
         if (i >= 0)
             txaInput.setText(listSnippet.get(i).getContent());
     }
-    
+
     @FXML
     protected void handleBtnClearCommAction(ActionEvent event) {
         txaTx.clear();
