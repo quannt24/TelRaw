@@ -56,7 +56,7 @@ public class RawStringParser {
 
         return buf.toString();
     }
-    
+
     /**
      * Convert byte array to text presentation of one byte characters.
      * Characters from 0x21 to 0x7e will be kept as it is. Other characters will
