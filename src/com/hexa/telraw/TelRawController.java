@@ -1,6 +1,8 @@
 package com.hexa.telraw;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 
 public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
@@ -35,18 +38,20 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     private Button btnClear;
     @FXML
-    private ListView<String> lstSnippet;
+    private ListView<String> ltvSnippet;
 
     private Client client;
-    private ObservableList<String> listSnippet = FXCollections.observableArrayList();
+    private ObservableList<String> listSnipStr = FXCollections.observableArrayList();
+    private ArrayList<Snippet> listSnippet;
 
     public TelRawController() {
+        listSnippet = new ArrayList<>();
     }
 
     @FXML
     public void initialize() {
         pinConnect.setVisible(false);
-        lstSnippet.setItems(listSnippet);
+        ltvSnippet.setItems(listSnipStr);
     }
 
     @FXML
@@ -106,14 +111,24 @@ public class TelRawController implements ConnectionObserver, DataObserver {
 
     @FXML
     protected void handleBtnSaveAction(ActionEvent event) {
-        String snippet = txaInput.getText();
-        if (snippet != null && snippet.length() > 0)
-            listSnippet.add(snippet);
+        DialogAddSnippet dialog = new DialogAddSnippet(txaInput.getText());
+        Optional<Snippet> optSnip = dialog.showAndWait();
+        if (optSnip.isPresent()) {
+            listSnippet.add(optSnip.get());
+            listSnipStr.add(optSnip.get().toString());
+        }
     }
 
     @FXML
     protected void handleBtnClearAction(ActionEvent event) {
         txaInput.clear();
+    }
+    
+    @FXML
+    protected void handleLtvSnippetOnMouseClicked(MouseEvent event) {
+        int i = ltvSnippet.getSelectionModel().getSelectedIndex();
+        if (i >= 0)
+            txaInput.setText(listSnippet.get(i).getContent());
     }
 
     /*
