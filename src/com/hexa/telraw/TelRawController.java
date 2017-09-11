@@ -40,9 +40,11 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     private Button btnSave;
     @FXML
-    private Button btnClear;
+    private Button btnClearInput;
     @FXML
     private ListView<String> ltvSnippet;
+    @FXML
+    private Button btnClearComm;
 
     private Client client;
     private ObservableList<String> listSnipStr = FXCollections.observableArrayList();
@@ -124,7 +126,7 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     }
 
     @FXML
-    protected void handleBtnClearAction(ActionEvent event) {
+    protected void handleBtnClearInputAction(ActionEvent event) {
         txaInput.clear();
     }
     
@@ -133,6 +135,14 @@ public class TelRawController implements ConnectionObserver, DataObserver {
         int i = ltvSnippet.getSelectionModel().getSelectedIndex();
         if (i >= 0)
             txaInput.setText(listSnippet.get(i).getContent());
+    }
+    
+    @FXML
+    protected void handleBtnClearCommAction(ActionEvent event) {
+        txaTx.clear();
+        txaRx.clear();
+        txaTxChar.clear();
+        txaRxChar.clear();
     }
 
     /*
