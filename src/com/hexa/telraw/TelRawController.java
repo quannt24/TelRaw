@@ -32,6 +32,10 @@ public class TelRawController implements ConnectionObserver, DataObserver {
     @FXML
     private TextArea txaRx;
     @FXML
+    private TextArea txaTxChar;
+    @FXML
+    private TextArea txaRxChar;
+    @FXML
     private Button btnSend;
     @FXML
     private Button btnSave;
@@ -195,6 +199,8 @@ public class TelRawController implements ConnectionObserver, DataObserver {
             public void run() {
                 txaRx.appendText(RawStringParser.toReadable(raw) + "\n");
                 txaTx.appendText("\n");
+                txaRxChar.appendText(RawStringParser.toReadableChar(raw) + "\n");
+                txaTxChar.appendText("\n");
             }
         });
     }
@@ -207,6 +213,8 @@ public class TelRawController implements ConnectionObserver, DataObserver {
             public void run() {
                 txaTx.appendText(RawStringParser.toReadable(raw) + "\n");
                 txaRx.appendText("\n");
+                txaTxChar.appendText(RawStringParser.toReadableChar(raw) + "\n");
+                txaRxChar.appendText("\n");
             }
         });
     }

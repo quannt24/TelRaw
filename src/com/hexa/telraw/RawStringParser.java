@@ -56,6 +56,27 @@ public class RawStringParser {
 
         return buf.toString();
     }
+    
+    /**
+     * Convert byte array to text presentation of one byte characters.
+     * Characters from 0x21 to 0x7e will be kept as it is. Other characters will
+     * be represented by 0x2e.
+     * 
+     * @param data
+     * @return
+     */
+    public static String toReadableChar(byte[] data) {
+        StringBuffer buf = new StringBuffer();
+
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] >= 0x21 && data[i] <= 0x7e)
+                buf.append((char) data[i]);
+            else
+                buf.append((char) 0x2e);
+        }
+
+        return buf.toString();
+    }
 
     /**
      * Parse a normal byte sequence: "{input}"
