@@ -1,4 +1,4 @@
-package com.hexa.telraw;
+package hexa.telraw;
 
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;

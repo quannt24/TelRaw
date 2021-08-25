@@ -1,4 +1,4 @@
-package com.hexa.telraw;
+package hexa.telraw;
 
 public interface DataObserver {
 
