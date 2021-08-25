@@ -1,4 +1,4 @@
-package com.hexa.telraw;
+package hexa.telraw;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -27,13 +27,13 @@ public class RawStringParser {
 
     /**
      * Convert byte array to text presentation. Identical to toReadable(byte[]
-     * data, int block) with block size is 2.
+     * data, int block) with block size is 1.
      * 
      * @param data
      * @return
      */
     public static String toReadable(byte[] data) {
-        return toReadable(data, 2);
+        return toReadable(data, 1);
     }
 
     /**

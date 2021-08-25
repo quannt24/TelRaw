@@ -1,4 +1,4 @@
-package com.hexa.telraw;
+package hexa.telraw;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
