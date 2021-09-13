@@ -121,16 +121,17 @@ public class Client implements CompletionHandler<Void, Attachment> {
     }
 
     public void disconnect() throws IOException {
-        if (reader != null)
-            reader.running = false; // Stop reading thread
         if (channel != null)
             channel.close();
 
-        try {
-            reader.join();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        if (reader != null) {
+            reader.running = false; // Stop reading thread
+            try {
+                reader.join();
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         if (conObs != null)
